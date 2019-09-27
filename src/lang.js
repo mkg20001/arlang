@@ -3,7 +3,7 @@
 const query = "& (= a 'test') (= b 'test')"
 const query2 = "and(equals(a, 'test'), equals(b, 'test'))"
 
-function parseTokens1 (tokens) {
+function sym (tokens) {
   let i = 0
 
   let block = 'exprLeft'
@@ -103,7 +103,7 @@ function parseTokens1 (tokens) {
 }
 
 const specialNames = ['and', 'equals']
-function parseTokens2 (tokens) {
+function fnc (tokens) {
   let i = 0
 
   let block = 'exprLeft'
@@ -188,3 +188,7 @@ function parseTokens2 (tokens) {
   return cur.expr2
 }
 
+module.exports = {
+  sym,
+  fnc
+}

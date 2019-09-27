@@ -38,6 +38,26 @@ function lexer (input) {
       continue
     }
 
+    if (char === '&') {
+      tokens.push({
+        type: 'and',
+        value: char
+      })
+
+      current++
+      continue
+    }
+
+    if (char === '=') {
+      tokens.push({
+        type: 'equals',
+        value: char
+      })
+
+      current++
+      continue
+    }
+
     let WHITESPACE = /\s/
     if (WHITESPACE.test(char)) {
       current++
