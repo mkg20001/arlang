@@ -62,6 +62,7 @@ function sym (tokens) {
             i++
             break
           }
+          case 'placeholder':
           case 'string': {
             cur.expr2 = t.value
             block = 'exprEnd'
@@ -69,7 +70,7 @@ function sym (tokens) {
             break
           }
           default: {
-            unexpectedType('parsensOpen or string')
+            unexpectedType('parsensOpen, placeholder or string')
           }
         }
 
@@ -103,7 +104,7 @@ function sym (tokens) {
 }
 
 const specialNames = ['and', 'equals']
-function fnc (tokens) { // eslint-disable-line no-complexity
+function fnc (tokens) { // eslint-disable-line complexity
   let i = 0
 
   let block = 'opNameOrVar'

@@ -88,7 +88,7 @@ function lexer (input) { // eslint-disable-line complexity
         char = input[++current]
       }
 
-      tokens.push({ type: 'placeholder', value: {$placeholder: value} })
+      tokens.push({ type: 'placeholder', value: {$placeholder: parseInt(value, 10)} })
       continue
     }
 
