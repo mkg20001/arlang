@@ -103,7 +103,7 @@ function sym (tokens) {
 }
 
 const specialNames = ['and', 'equals']
-function fnc (tokens) {
+function fnc (tokens) { // eslint-disable-line no-complexity
   let i = 0
 
   let block = 'opNameOrVar'
@@ -122,9 +122,9 @@ function fnc (tokens) {
         if (t.type !== 'literal') { unexpectedType('literal') }
 
         const name = t.value
-        if (specialNames.indexOf(name) === -1 && !cur.op) { unexpectedType('literal with special name') }
+        if (!specialNames.filter(e => e === name).length && !cur.op) { unexpectedType('literal with special name') }
 
-        if (specialNames.indexOf(name) === -1) {
+        if (specialNames.filter(e => e === name).length) {
           let newCur = {op: name}
           if (cur.expr1) {
             stack.push([cur, 'end'])
@@ -133,15 +133,26 @@ function fnc (tokens) {
             stack.push([cur, 'comma'])
             cur = cur.expr1 = newCur
           }
-        } else {
-          if (!cur.expr1) {
-            cur.expr1 = name
-            block = 'comma'
+          block = 'parens'
+        } else { // it's a var
+          if (cur.expr1) {
+            unexpectedType('special literal')
           } else {
-            unexpectedType('non-special literal')
+            cur.expr1 = t.value
+            block = 'comma'
           }
         }
         i++
+
+        break
+      }
+      case 'parens': {
+        if (t.type === 'parensOpen') {
+          block = 'opNameOrVar'
+          i++
+        } else {
+          unexpectedType('parensOpen')
+        }
 
         break
       }
@@ -156,11 +167,14 @@ function fnc (tokens) {
         break
       }
       case 'value': {
-        if (t.type === 'string') {
+        if (t.type === 'string' || t.type === 'placeholder') {
           cur.expr2 = t.value
+          block = 'end'
           i++
+        } else if (t.type === 'literal' && specialNames.filter(e => e === t.value)) {
+          block = 'opNameOrVar'
         } else {
-          unexpectedType('string')
+          unexpectedType('string, special literal or placeholder')
         }
 
         break
