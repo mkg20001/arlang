@@ -42,6 +42,7 @@ function sym (tokens) {
           }
           case 'literal': {
             cur.expr1 = t.value
+            block = 'exprRight'
             i++
             break
           }
@@ -97,6 +98,8 @@ function sym (tokens) {
       }
     }
   }
+
+  return cur
 }
 
 const specialNames = ['and', 'equals']
