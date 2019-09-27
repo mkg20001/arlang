@@ -1,6 +1,6 @@
 {
   "name": "arlang",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Human-readable ARQL query language",
   "main": "src/index.js",
   "scripts": {
