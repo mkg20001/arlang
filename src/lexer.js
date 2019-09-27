@@ -1,6 +1,8 @@
 'use strict'
 
-function lexer (input) {
+/* eslint-disable no-continue */
+
+function lexer (input) { // eslint-disable-line complexity
   let current = 0
 
   let tokens = []
@@ -94,7 +96,30 @@ function lexer (input) {
       let value = ''
       char = input[++current]
 
-      while (char !== '"') {
+      while (char !== '"' && input[current - 1] !== '\\') {
+        if (char === '\\' && input[current + 1] === '"') {
+          char = input[++current]
+        }
+
+        value += char
+        char = input[++current]
+      }
+
+      char = input[++current]
+
+      tokens.push({ type: 'string', value })
+      continue
+    }
+
+    if (char === "'") {
+      let value = ''
+      char = input[++current]
+
+      while (char !== "'" && input[current - 1] !== '\\') {
+        if (char === '\\' && input[current + 1] === "'") {
+          char = input[++current]
+        }
+
         value += char
         char = input[++current]
       }

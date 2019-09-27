@@ -1,8 +1,5 @@
 'use strict'
 
-const query = "& (= a 'test') (= b 'test')"
-const query2 = "and(equals(a, 'test'), equals(b, 'test'))"
-
 function sym (tokens) {
   let i = 0
 
@@ -11,7 +8,7 @@ function sym (tokens) {
   let cur = {}
 
   function unexpectedType (expected) {
-    throw new TypeError(`Unexpected type ${tokens[i].type} at ${i}, expecetd ${expected}`)
+    throw new TypeError(`Unexpected type ${tokens[i].type} at ${i}, expected ${expected}`)
   }
 
   while (tokens[i]) {
@@ -21,14 +18,14 @@ function sym (tokens) {
       case 'exprLeft': {
         switch (t.type) {
           case 'and':
-          case 'equal': {
+          case 'equals': {
             cur.op = t.type
             block = 'exprMiddle'
             i++
             break
           }
           default: {
-            unexpectedType('and or equal')
+            unexpectedType('and or equals')
           }
         }
 
@@ -49,7 +46,7 @@ function sym (tokens) {
             break
           }
           default: {
-            unexpectedType('parsensOpen or literal')
+            unexpectedType('parensOpen or literal')
           }
         }
 
@@ -106,12 +103,12 @@ const specialNames = ['and', 'equals']
 function fnc (tokens) {
   let i = 0
 
-  let block = 'exprLeft'
+  let block = 'opNameOrVar'
   let stack = []
   let cur = {op: false, expr1: 'arql'}
 
   function unexpectedType (expected) {
-    throw new TypeError(`Unexpected type ${tokens[i].type} at ${i}, expecetd ${expected}`)
+    throw new TypeError(`Unexpected type ${tokens[i].type} at ${i}, expected ${expected}`)
   }
 
   while (tokens[i]) {
@@ -158,6 +155,7 @@ function fnc (tokens) {
       case 'value': {
         if (t.type === 'string') {
           cur.expr2 = t.value
+          i++
         } else {
           unexpectedType('string')
         }
