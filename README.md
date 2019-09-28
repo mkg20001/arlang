@@ -21,4 +21,8 @@ const result = await arweave.arql(query) // doesn't matter which one we take, th
 
 // worried about ARQL injections? we've got 'ya covered
 const queryWithPlaceholdoers = arlang('and(equals(someTag, $1), equals(otherTag, $2))', {lang: 'sym', params: ['someValue', 'someTag']})
+
+// there's also a short function to make things... shorter
+const $arql = arlang.short('fnc')
+const queryWplaceholders = $arql('and(equals(someTag, $1), equals(otherTag, $2))', 'someValue', 'someTag')
 ```

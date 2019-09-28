@@ -29,3 +29,5 @@ module.exports = (string, {params, lang}) => {
 
   return query
 }
+
+module.exports.short = (lang) => (query, ...params) => module.exports(query, {lang, params})
