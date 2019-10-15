@@ -56,4 +56,8 @@ describe('arlang', () => {
     () => main(query4, {lang: 'fnc', params: ['test1', 'test2']}),
     queryRes
   )
+
+  it('should not blow up on undefined', async () => {
+    main('equals', {lang: 'fnc'})
+  })
 })
