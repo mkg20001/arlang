@@ -61,16 +61,16 @@ function lexer (input) { // eslint-disable-line complexity
     }
 
     let WHITESPACE = /\s/
-    if (WHITESPACE.test(char)) {
+    if (char.match(WHITESPACE)) {
       current++
       continue
     }
 
     let NUMBERS = /[0-9]/
-    if (NUMBERS.test(char)) {
+    if (char.match(NUMBERS)) {
       let value = ''
 
-      while (NUMBERS.test(char)) {
+      while (char && char.match(NUMBERS)) {
         value += char
         char = input[++current]
       }
@@ -83,7 +83,7 @@ function lexer (input) { // eslint-disable-line complexity
       let value = ''
       char = input[++current]
 
-      while (NUMBERS.test(char)) {
+      while (char && char.match(NUMBERS)) {
         value += char
         char = input[++current]
       }
@@ -115,7 +115,7 @@ function lexer (input) { // eslint-disable-line complexity
       let value = ''
       char = input[++current]
 
-      while (char !== "'" && input[current - 1] !== '\\') {
+      while (char && char !== "'" && input[current - 1] !== '\\') {
         if (char === '\\' && input[current + 1] === "'") {
           char = input[++current]
         }
@@ -132,15 +132,15 @@ function lexer (input) { // eslint-disable-line complexity
 
     let LETTERS = /[a-z]/i
     const ALPHANUM = /[a-z0-9]/i
-    if (LETTERS.test(char)) {
+    if (char.match(LETTERS)) {
       let value = ''
 
-      while (ALPHANUM.test(char)) {
+      while (char && char.match(ALPHANUM)) {
         value += char
         char = input[++current]
       }
 
-      tokens.push({ type: 'literal', value })
+      tokens.push({ type: 'literal', value: value.toLowerCase() })
       continue
     }
 
